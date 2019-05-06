@@ -2,7 +2,8 @@ import {
   Component,
   ChangeDetectionStrategy,
   ViewChild,
-  TemplateRef
+  TemplateRef,
+  OnInit
 } from '@angular/core';
 import {
   startOfDay,
@@ -22,6 +23,8 @@ import {
   CalendarEventTimesChangedEvent,
   CalendarView
 } from 'angular-calendar';
+import { ServerService } from '../server.service';
+
 
 const colors: any = {
   red: {
@@ -117,7 +120,10 @@ export class CalendarComponent {
 
   activeDayIsOpen: boolean = true;
 
-  constructor(private modal: NgbModal) {}
+  constructor(private modal: NgbModal, private Server: ServerService) {}
+  ngOnInit() {
+    this.addEventFromServer();
+  }
 
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
     if (isSameMonth(date, this.viewDate)) {
@@ -184,5 +190,24 @@ export class CalendarComponent {
   closeOpenMonthViewDay() {
     this.activeDayIsOpen = false;
   }
+
+  addEventFromServer(): void {
+    this.events = [
+      ...this.events,
+      {
+        title: this.Server.get_reservation()['1'] ,
+        start: startOfDay(new Date()) ,
+        end: endOfDay(new Date()) ,
+        color: colors.green,
+        draggable: true,
+        resizable: {
+          beforeStart: true,
+          afterEnd: true
+        }
+      }
+    ];
+  }
+
+
 
 }

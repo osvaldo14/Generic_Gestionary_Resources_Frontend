@@ -7,12 +7,17 @@ import { AppComponent } from './app.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { HeroesComponent } from './heroes/heroes.component';
 import { CalendarComponent } from './calendar/calendar.component';
+import { NavigationComponent } from './navigation/navigation.component';
+import { FormsModule } from '@angular/forms';
+import 'flatpickr/dist/flatpickr.css'; // you may need to adjust the css import depending on your build tool
+import { FlatpickrModule } from 'angularx-flatpickr';
 
 @NgModule({
   declarations: [
     AppComponent,
     HeroesComponent,
-    CalendarComponent
+    CalendarComponent,
+    NavigationComponent
   ],
   imports: [
     BrowserModule,
@@ -20,7 +25,9 @@ import { CalendarComponent } from './calendar/calendar.component';
     CalendarModule.forRoot({
       provide: DateAdapter,
       useFactory: adapterFactory
-    })
+    }),
+    FormsModule,
+    FlatpickrModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]
