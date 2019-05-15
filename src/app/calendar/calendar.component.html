@@ -105,7 +105,7 @@
     <thead>
     <tr>
       <th>Title</th>
-      <th>Secondary color</th>
+      <th>Ressources</th>
       <th>Starts at</th>
       <th>Ends at</th>
       <th>Remove</th>
@@ -116,6 +116,7 @@
     <tr *ngFor="let event of events">
       <td>
         <input
+          #name
           type="text"
           class="form-control"
           [(ngModel)]="event.title"
@@ -123,14 +124,16 @@
         />
       </td>
       <td>
-        <input
-          type="color"
-          [(ngModel)]="event.color.secondary"
-          (change)="refresh.next()"
-        />
+        <mat-form-field>
+          <mat-label>Ressources</mat-label>
+          <mat-select #resources [formControl]="ressources" multiple (click)="create_resources_reservation_list()">
+            <mat-option *ngFor="let r of resourceList" [value]="r">{{r}}</mat-option>
+          </mat-select>
+        </mat-form-field>
       </td>
       <td>
         <input
+          #start
           class="form-control"
           type="text"
           mwlFlatpickr
@@ -146,6 +149,7 @@
       </td>
       <td>
         <input
+          #end
           class="form-control"
           type="text"
           mwlFlatpickr
@@ -160,6 +164,9 @@
         />
       </td>
       <td>
+        <button class="btn btn-primary" (click)="create_reservation(name.value, resources.value, start.value, end.value)">
+          Create
+        </button>
         <button class="btn btn-danger" (click)="deleteEvent(event)">
           Delete
         </button>

@@ -3,7 +3,7 @@ import {
   ChangeDetectionStrategy,
   ViewChild,
   TemplateRef,
-  OnInit
+  OnInit, ElementRef
 } from '@angular/core';
 import {
   startOfDay,
@@ -15,16 +15,19 @@ import {
   isSameMonth,
   addHours
 } from 'date-fns';
-import { Subject } from 'rxjs';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import {Subject} from 'rxjs';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {
   CalendarEvent,
   CalendarEventAction,
   CalendarEventTimesChangedEvent,
   CalendarView
 } from 'angular-calendar';
-import { ServerService } from '../server.service';
-
+import {ServerService} from '../server.service';
+import {Ressources} from '../interface/ressources';
+import {FormControl} from '@angular/forms';
+import {Reservation} from '../interface/Reservation';
+import {forEach} from '@angular/router/src/utils/collection';
 
 const colors: any = {
   red: {
@@ -41,13 +44,36 @@ const colors: any = {
   }
 };
 
+export interface Food {
+  value: string;
+  viewValue: string;
+}
+
+export interface MyEvent extends CalendarEvent {
+  title: string;
+  resources: string[];
+  start: Date;
+  end: Date;
+  color: any;
+  draggable: true;
+  resizable: {
+    beforeStart: true,
+    afterEnd: true
+  };
+}
+
 @Component({
   selector: 'app-calendar',
   templateUrl: './calendar.component.html',
   styleUrls: ['./calendar.component.css']
 })
-export class CalendarComponent implements OnInit{
+export class CalendarComponent implements OnInit {
   @ViewChild('modalContent') modalContent: TemplateRef<any>;
+  foods: Food[] = [];
+
+  ressources = new FormControl();
+  resourceList: string[] = [];
+
 
   view: CalendarView = CalendarView.Month;
 
@@ -62,32 +88,34 @@ export class CalendarComponent implements OnInit{
   actions: CalendarEventAction[] = [
     {
       label: '<i class="fa fa-fw fa-pencil"></i>',
-      onClick: ({ event }: { event: CalendarEvent }): void => {
-        this.handleEvent('Edited', event);
+      onClick: ({event}: { event: CalendarEvent }): void => {
+        this.handleEvent('Edited', event as MyEvent);
       }
     },
     {
       label: '<i class="fa fa-fw fa-times"></i>',
-      onClick: ({ event }: { event: CalendarEvent }): void => {
+      onClick: ({event}: { event: CalendarEvent }): void => {
         this.events = this.events.filter(iEvent => iEvent !== event);
-        this.handleEvent('Deleted', event);
+        this.handleEvent('Deleted', event as MyEvent);
       }
     }
   ];
 
   refresh: Subject<any> = new Subject();
 
-  events: CalendarEvent[] = [
-  ];
+  events: MyEvent[] = [];
 
   activeDayIsOpen: boolean = true;
 
-  constructor(private modal: NgbModal, private Server: ServerService) {}
-  ngOnInit() {
-    this.addEventFromServer();
+  constructor(private modal: NgbModal, private Server: ServerService) {
   }
 
-  dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
+  ngOnInit() {
+    this.create_resources_reservation_list();
+    this.get_reservation_from_db();
+  }
+
+  dayClicked({date, events}: { date: Date; events: CalendarEvent[] }): void {
     if (isSameMonth(date, this.viewDate)) {
       this.viewDate = date;
       if (
@@ -104,24 +132,23 @@ export class CalendarComponent implements OnInit{
   eventTimesChanged({
                       event,
                       newStart,
-                      newEnd
+                      newEnd,
                     }: CalendarEventTimesChangedEvent): void {
     this.events = this.events.map(iEvent => {
       if (iEvent === event) {
-        return {
-          ...event,
-          start: newStart,
-          end: newEnd
-        };
+        event.start = newStart;
+        event.end = newEnd;
+        return event as MyEvent;
       }
       return iEvent;
     });
-    this.handleEvent('Dropped or resized', event);
+    this.handleEvent('Dropped or resized', event as MyEvent);
   }
 
-  handleEvent(action: string, event: CalendarEvent): void {
-    this.modalData = { event, action };
-    this.modal.open(this.modalContent, { size: 'lg' });
+  handleEvent(action: string, event: MyEvent): void {
+   // this.modalData = {event, action};
+    //this.modal.open(this.modalContent, {size: 'lg'});
+    console.log(event.resources);
   }
 
   addEvent(): void {
@@ -129,9 +156,10 @@ export class CalendarComponent implements OnInit{
       ...this.events,
       {
         title: 'New event',
+        resources: null,
         start: startOfDay(new Date()),
         end: endOfDay(new Date()),
-        color: colors.red,
+        color: colors.blue,
         draggable: true,
         resizable: {
           beforeStart: true,
@@ -153,23 +181,51 @@ export class CalendarComponent implements OnInit{
     this.activeDayIsOpen = false;
   }
 
-  addEventFromServer(): void {
+  addEventFromServer(name, start, end, r): void {
     this.events = [
       ...this.events,
       {
-        title: this.Server.get_reservation()['1'] ,
-        start: startOfDay(new Date()) ,
-        end: endOfDay(new Date()) ,
+        title: name,
+        resources: r,
+        start: startOfDay(new Date(start)),
+        end: endOfDay(new Date(end)),
         color: colors.blue,
         draggable: true,
         resizable: {
           beforeStart: true,
           afterEnd: true
-        }
+        },
       }
     ];
   }
 
+  create_reservation(r_name, r_resources, r_start, r_end) {
+    const array = {
+      name: r_name,
+      resources: r_resources,
+      start: r_start,
+      end: r_end
+    };
+    const r = JSON.stringify(array);
+    this.Server.create_reservation(r).subscribe();
+  }
 
+  create_resources_reservation_list() {
+    this.foods = [];
+    this.resourceList = [];
+    this.Server.get_resources_names().subscribe((data: Ressources[]) => {
+      for (let i = 0; i < data.length; i++) {
+        this.resourceList.push(String(data[i]));
+      }
+    });
+  }
 
+  get_reservation_from_db() {
+    this.Server.get_reservation_list().subscribe((data: Reservation[]) => {
+      for (let i = 0; i < data.length; i++) {
+        this.addEventFromServer(data[i].name, data[i].start, data[i].end, data[i].resource);
+        console.log();
+      }
+    });
+  }
 }

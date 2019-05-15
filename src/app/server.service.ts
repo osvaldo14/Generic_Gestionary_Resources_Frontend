@@ -7,14 +7,14 @@ import {HttpClient} from '@angular/common/http';
 })
 export class ServerService {
 
-  get_reservation() {
+  get_resources_names() {
 
     return this.http.get('http://localhost:6999/');
   }
 
-  create_resource(resource) {
+  create_resource(r) {
 
-    return this.http.post('http://localhost:6999/CreateResource', resource);
+    return this.http.post('http://localhost:6999/CreateResource', r);
 
   }
 
@@ -24,6 +24,18 @@ export class ServerService {
   get_resource_by_type() {
 
     return this.http.get('http://localhost:6999/resourcebytype');
+
+  }
+
+  create_reservation(res) {
+
+    return this.http.post('http://localhost:6999/createreservation', res);
+
+  }
+
+  get_reservation_list() {
+
+    return this.http.get('http://localhost:6999/getreservationlist');
 
   }
 }

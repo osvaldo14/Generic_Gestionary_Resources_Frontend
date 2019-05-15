@@ -7,8 +7,11 @@ import {MatTreeFlatDataSource, MatTreeFlattener} from '@angular/material/tree';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ServerService} from '../server.service';
 import {Ressources} from '../interface/ressources';
+import {MatDialog} from '@angular/material';
 import {strictEqual} from 'assert';
 import * as $ from 'jquery';
+import {CreateResourceComponent} from '../create-resource/create-resource.component';
+
 
 /**
  * Food data with nested structure.
@@ -32,16 +35,7 @@ interface ExampleFlatNode {
   styleUrls: ['./side-nav-bar.component.css']
 })
 export class SideNavBarComponent implements OnInit {
-
-
   TREE_DATA: FoodNode[] = [];
-  tmp = {
-    name: 'Exemple child',
-    children: [
-      {name: 'Gluck'},
-      {name: 'Jean-michel'},
-    ]
-  };
   DISPLAY_RESOURCE = true;
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
     .pipe(
@@ -65,15 +59,20 @@ export class SideNavBarComponent implements OnInit {
   dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
 
 
-  constructor(private breakpointObserver: BreakpointObserver, private Server: ServerService) {
+  constructor(private breakpointObserver: BreakpointObserver, private Server: ServerService, public dialog: MatDialog) {
     this.dataSource.data = this.TREE_DATA;
   }
 
   hasChild = (_: number, node: ExampleFlatNode) => node.expandable;
 
   ngOnInit() {
+    this.create_tree_type();
+  }
+
+  create_tree_type() {
+    // reset de tree data pour éviter le dédoublement :
+    this.TREE_DATA = [];
     this.Server.get_resource_by_type().subscribe((data: Ressources) => {
-      console.log(data);
       for (const key in data) {
         let entry_temp = {
           name: 'Exemple child',
@@ -83,7 +82,6 @@ export class SideNavBarComponent implements OnInit {
         entry_temp.name = key;
         const tmp = data[key];
         for (let i = 0 ; i < tmp.length ; i++) {
-          console.log(tmp[i]);
           entry_temp.children.push({name: tmp[i]});
         }
         this.TREE_DATA.push(entry_temp);
@@ -91,8 +89,16 @@ export class SideNavBarComponent implements OnInit {
       }
     });
   }
-
   ToogleDisplayResource() {
     this.DISPLAY_RESOURCE = !this.DISPLAY_RESOURCE;
+    this.create_tree_type();
+  }
+
+  openDialog() {
+    const dialogRef = this.dialog.open(CreateResourceComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
   }
 }

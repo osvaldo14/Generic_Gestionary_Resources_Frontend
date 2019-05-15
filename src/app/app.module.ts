@@ -14,11 +14,48 @@ import 'flatpickr/dist/flatpickr.css'; // you may need to adjust the css import 
 import { FlatpickrModule } from 'angularx-flatpickr';
 import { SideNavBarComponent } from './side-nav-bar/side-nav-bar.component';
 import { LayoutModule } from '@angular/cdk/layout';
-import { MatToolbarModule, MatButtonModule, MatSidenavModule, MatIconModule, MatListModule } from '@angular/material';
+import {
+  MatToolbarModule,
+  MatButtonModule,
+  MatSidenavModule,
+  MatIconModule,
+  MatListModule,
+  MatStepperModule,
+  MatInputModule, MatFormFieldModule, MatDialogModule,
+  MatAutocompleteModule,
+  MatBadgeModule,
+  MatBottomSheetModule,
+  MatButtonToggleModule,
+  MatCardModule,
+  MatCheckboxModule,
+  MatChipsModule,
+  MatDatepickerModule,
+  MatDividerModule,
+  MatExpansionModule,
+  MatGridListModule,
+  MatMenuModule,
+  MatPaginatorModule,
+  MatProgressBarModule,
+  MatProgressSpinnerModule,
+  MatRadioModule,
+  MatRippleModule,
+  MatSelectModule,
+  MatSliderModule,
+  MatSlideToggleModule,
+  MatSnackBarModule,
+  MatSortModule,
+  MatTableModule,
+  MatTabsModule,
+  MatTooltipModule,
+} from '@angular/material';
 import {HttpClientModule} from '@angular/common/http';
 import {MatNativeDateModule} from '@angular/material';
 import {MatTreeModule} from '@angular/material/tree';
 import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
+import { CreateResourceComponent } from './create-resource/create-resource.component';
+
+
+
 
 @NgModule({
   declarations: [
@@ -26,8 +63,10 @@ import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
     HeroesComponent,
     CalendarComponent,
     NavigationComponent,
-    SideNavBarComponent
+    SideNavBarComponent,
+    CreateResourceComponent,
   ],
+  entryComponents: [CreateResourceComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -38,6 +77,7 @@ import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
     FormsModule,
     FlatpickrModule.forRoot(),
     LayoutModule,
+    MatDialogModule,
     MatToolbarModule,
     MatButtonModule,
     MatSidenavModule,
@@ -47,9 +87,52 @@ import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
     HttpClientModule,
     MatNativeDateModule,
     ReactiveFormsModule,
-    MatTreeModule
+    MatTreeModule,
+    MatStepperModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatNativeDateModule,
+    MatAutocompleteModule,
+    MatBadgeModule,
+    MatBottomSheetModule,
+    MatButtonModule,
+    MatButtonToggleModule,
+    MatCardModule,
+    MatCheckboxModule,
+    MatChipsModule,
+    MatStepperModule,
+    MatDatepickerModule,
+    MatDialogModule,
+    MatDividerModule,
+    MatExpansionModule,
+    MatGridListModule,
+    MatIconModule,
+    MatInputModule,
+    MatListModule,
+    MatMenuModule,
+    MatNativeDateModule,
+    MatPaginatorModule,
+    MatProgressBarModule,
+    MatProgressSpinnerModule,
+    MatRadioModule,
+    MatRippleModule,
+    MatSelectModule,
+    MatSidenavModule,
+    MatSliderModule,
+    MatSlideToggleModule,
+    MatSnackBarModule,
+    MatSortModule,
+    MatTableModule,
+    MatTabsModule,
+    MatToolbarModule,
+    MatTooltipModule,
+    MatTreeModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+platformBrowserDynamic().bootstrapModule(AppModule);
+
