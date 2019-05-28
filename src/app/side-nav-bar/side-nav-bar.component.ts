@@ -11,7 +11,9 @@ import {MatDialog} from '@angular/material';
 import {strictEqual} from 'assert';
 import * as $ from 'jquery';
 import {CreateResourceComponent} from '../create-resource/create-resource.component';
-
+import {LoginComponent} from '../login/login.component';
+import {ChoiceCreationComponent} from '../choice-creation/choice-creation.component';
+import {CreateTypeComponent} from '../create-type/create-type.component';
 
 /**
  * Food data with nested structure.
@@ -76,12 +78,11 @@ export class SideNavBarComponent implements OnInit {
       for (const key in data) {
         let entry_temp = {
           name: 'Exemple child',
-          children: [
-          ]
+          children: []
         };
         entry_temp.name = key;
         const tmp = data[key];
-        for (let i = 0 ; i < tmp.length ; i++) {
+        for (let i = 0; i < tmp.length; i++) {
           entry_temp.children.push({name: tmp[i]});
         }
         this.TREE_DATA.push(entry_temp);
@@ -89,16 +90,26 @@ export class SideNavBarComponent implements OnInit {
       }
     });
   }
+
   ToogleDisplayResource() {
     this.DISPLAY_RESOURCE = !this.DISPLAY_RESOURCE;
     this.create_tree_type();
   }
 
   openDialog() {
-    const dialogRef = this.dialog.open(CreateResourceComponent);
+    const dialogRef = this.dialog.open(ChoiceCreationComponent);
 
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);
     });
+  }
+
+  displayLoginPage() {
+    const dialogRef = this.dialog.open(LoginComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
+
   }
 }

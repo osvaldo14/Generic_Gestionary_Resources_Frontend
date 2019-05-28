@@ -1,6 +1,7 @@
 export interface Reservation {
+  id: number;
   name: string;
-  resource: string[];
+  resourceList: string[];
   start: Date;
   end: Date;
 }

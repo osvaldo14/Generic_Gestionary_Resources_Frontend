@@ -48,13 +48,18 @@ import {
   MatTabsModule,
   MatTooltipModule,
 } from '@angular/material';
-import {HttpClientModule} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {MatNativeDateModule} from '@angular/material';
 import {MatTreeModule} from '@angular/material/tree';
 import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 import { CreateResourceComponent } from './create-resource/create-resource.component';
-
-
+import { LoginComponent } from './login/login.component';
+import {fakeBackendProvider} from './fake-backend-interceptor';
+import {ErrorInterceptor} from './error-interceptor';
+import {JwtInterceptor} from './jwt-interceptor';
+import {routing} from './routing';
+import { ChoiceCreationComponent } from './choice-creation/choice-creation.component';
+import { CreateTypeComponent } from './create-type/create-type.component';
 
 
 @NgModule({
@@ -65,8 +70,15 @@ import { CreateResourceComponent } from './create-resource/create-resource.compo
     NavigationComponent,
     SideNavBarComponent,
     CreateResourceComponent,
+    LoginComponent,
+    ChoiceCreationComponent,
+    CreateTypeComponent,
   ],
-  entryComponents: [CreateResourceComponent],
+  entryComponents: [
+    CreateResourceComponent,
+    ChoiceCreationComponent,
+    CreateTypeComponent,
+    LoginComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -83,13 +95,11 @@ import { CreateResourceComponent } from './create-resource/create-resource.compo
     MatSidenavModule,
     MatIconModule,
     MatListModule,
-    FormsModule,
     HttpClientModule,
     MatNativeDateModule,
     ReactiveFormsModule,
     MatTreeModule,
     MatStepperModule,
-    FormsModule,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
@@ -129,8 +139,12 @@ import { CreateResourceComponent } from './create-resource/create-resource.compo
     MatToolbarModule,
     MatTooltipModule,
     MatTreeModule,
+    routing
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

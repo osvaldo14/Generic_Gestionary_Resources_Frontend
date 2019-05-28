@@ -126,7 +126,7 @@
       <td>
         <mat-form-field>
           <mat-label>Ressources</mat-label>
-          <mat-select #resources [formControl]="ressources" multiple (click)="create_resources_reservation_list()">
+          <mat-select #resources [formControl]="event.ressourcesFormControl" multiple (click)="create_resources_reservation_list()">
             <mat-option *ngFor="let r of resourceList" [value]="r">{{r}}</mat-option>
           </mat-select>
         </mat-form-field>

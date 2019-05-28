@@ -28,6 +28,8 @@ import {Ressources} from '../interface/ressources';
 import {FormControl} from '@angular/forms';
 import {Reservation} from '../interface/Reservation';
 import {forEach} from '@angular/router/src/utils/collection';
+import {MatSnackBar} from '@angular/material';
+
 
 const colors: any = {
   red: {
@@ -60,6 +62,7 @@ export interface MyEvent extends CalendarEvent {
     beforeStart: true,
     afterEnd: true
   };
+  ressourcesFormControl: FormControl;
 }
 
 @Component({
@@ -71,7 +74,6 @@ export class CalendarComponent implements OnInit {
   @ViewChild('modalContent') modalContent: TemplateRef<any>;
   foods: Food[] = [];
 
-  ressources = new FormControl();
   resourceList: string[] = [];
 
 
@@ -107,7 +109,8 @@ export class CalendarComponent implements OnInit {
 
   activeDayIsOpen: boolean = true;
 
-  constructor(private modal: NgbModal, private Server: ServerService) {
+  constructor(private modal: NgbModal, private Server: ServerService, private snackBar: MatSnackBar) {
+
   }
 
   ngOnInit() {
@@ -146,9 +149,11 @@ export class CalendarComponent implements OnInit {
   }
 
   handleEvent(action: string, event: MyEvent): void {
-   // this.modalData = {event, action};
-    //this.modal.open(this.modalContent, {size: 'lg'});
     console.log(event.resources);
+  }
+
+  updateRessourcesSelected() {
+    this.events.forEach(event => event.ressourcesFormControl.setValue(event.resources));
   }
 
   addEvent(): void {
@@ -164,13 +169,15 @@ export class CalendarComponent implements OnInit {
         resizable: {
           beforeStart: true,
           afterEnd: true
-        }
+        },
+        ressourcesFormControl: new FormControl()
       }
     ];
   }
 
   deleteEvent(eventToDelete: CalendarEvent) {
     this.events = this.events.filter(event => event !== eventToDelete);
+    this.Server.delete_reservation(eventToDelete.title).subscribe();
   }
 
   setView(view: CalendarView) {
@@ -181,7 +188,7 @@ export class CalendarComponent implements OnInit {
     this.activeDayIsOpen = false;
   }
 
-  addEventFromServer(name, start, end, r): void {
+  addEventFromServer(name, start, end, r: Array<string>): void {
     this.events = [
       ...this.events,
       {
@@ -195,19 +202,26 @@ export class CalendarComponent implements OnInit {
           beforeStart: true,
           afterEnd: true
         },
+        ressourcesFormControl: new FormControl()
       }
     ];
+
+    this.updateRessourcesSelected();
   }
 
   create_reservation(r_name, r_resources, r_start, r_end) {
-    const array = {
-      name: r_name,
-      resources: r_resources,
-      start: r_start,
-      end: r_end
-    };
-    const r = JSON.stringify(array);
-    this.Server.create_reservation(r).subscribe();
+    if (r_resources != null) {
+      const array = {
+        name: r_name,
+        resourceList: r_resources,
+        start: r_start,
+        end: r_end
+      };
+      const r = JSON.stringify(array);
+      this.Server.create_reservation(r).subscribe();
+    } else {
+      this.openSnackBar('Vous ne pouvez pas créer de réservation sans ressources', 'Compris !');
+    }
   }
 
   create_resources_reservation_list() {
@@ -223,9 +237,15 @@ export class CalendarComponent implements OnInit {
   get_reservation_from_db() {
     this.Server.get_reservation_list().subscribe((data: Reservation[]) => {
       for (let i = 0; i < data.length; i++) {
-        this.addEventFromServer(data[i].name, data[i].start, data[i].end, data[i].resource);
+        this.addEventFromServer(data[i].name, data[i].start, data[i].end, data[i].resourceList);
         console.log();
       }
+    });
+  }
+
+  openSnackBar(message: string, action: string) {
+    this.snackBar.open(message, action, {
+      duration: 2000,
     });
   }
 }

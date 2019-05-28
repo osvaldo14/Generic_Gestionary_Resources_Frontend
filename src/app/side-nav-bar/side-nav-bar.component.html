@@ -5,7 +5,7 @@
       [opened]="!(isHandset$ | async)">
     <mat-toolbar>Menu</mat-toolbar>
     <mat-nav-list>
-      <a mat-list-item href="#" id="R_Button" (click)="ToogleDisplayResource()">Ressource</a>
+      <a mat-list-item id="R_Button" (click)="ToogleDisplayResource()">Ressource</a>
 
 
       <mat-tree *ngIf="!DISPLAY_RESOURCE" [dataSource]="dataSource" [treeControl]="treeControl">
@@ -29,8 +29,10 @@
 
 
 
-      <a mat-list-item href="#" (click)="openDialog()">Créer une ressource</a>
-      <a mat-list-item href="#">Optimiser</a>
+      <a mat-list-item (click)="openDialog()">Créer</a>
+      <button mat-button [disabled]="true" >Optimiser</button>
+      <a mat-list-item (click)="displayLoginPage()" >Login</a>
+      <a mat-list-item href="#" hidden>Logout</a>
     </mat-nav-list>
 
   </mat-sidenav>

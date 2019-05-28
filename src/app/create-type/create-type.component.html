@@ -1,0 +1,27 @@
+<h1>Création du type</h1>
+
+<form [formGroup]="typeForm">
+
+  <label>
+    Nom du type: <input formControlName="name" />
+  </label>
+  <h2>Caractéristique</h2>
+  <div formArrayName="typeCaracteristics">
+    <div *ngFor="let item of carac.controls; let caracIndex = index" [formGroupName]="caracIndex">
+    <label>
+      Nom : <input formControlName="caracName">
+      Valeur :
+      <!--mat-select>
+        <mat-option *ngFor="let c of choices" [value]="choices">{{c}}</mat-option>
+      </mat-select-->
+      <input formControlName="caracValue">
+    </label>
+
+      <button type="button" class="btn btn-success"  (click)="addCarac()">Ajouter une caractéristique</button>
+      <button type="button" class="btn btn-danger" (click)="deleteCarac(caracIndex)">Supprimer cette caractéristique</button>
+
+    </div>
+  </div>
+
+  <button type="button" class="btn btn-primary" (click)="createType(this.typeForm.value)">Créer</button>
+</form>
