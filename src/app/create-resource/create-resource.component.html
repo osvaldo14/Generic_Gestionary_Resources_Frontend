@@ -52,10 +52,10 @@
 
 
   <mat-step>
-    <ng-template matStepLabel>Créer</ng-template>
-    Click on create to complete creation
+    <ng-template matStepLabel>Confirmation</ng-template>
+    Cliquer sur "create" pour finaliser la création
     <div>
-      <button mat-button (click)="formatJson(thirdFormGroup.value, type.selected['_mostRecentViewValue'], name.value)">Create</button>
+      <button mat-button [mat-dialog-close]="true" (click)="formatJson(thirdFormGroup.value, type.selected['_mostRecentViewValue'], name.value)">Create</button>
       <button mat-button (click)="stepper.reset()">Reset</button>
     </div>
   </mat-step>

@@ -60,6 +60,10 @@ import {JwtInterceptor} from './jwt-interceptor';
 import {routing} from './routing';
 import { ChoiceCreationComponent } from './choice-creation/choice-creation.component';
 import { CreateTypeComponent } from './create-type/create-type.component';
+import { ResourceInfoComponent } from './resource-info/resource-info.component';
+import { SuccessfullCreationComponent } from './successfull-creation/successfull-creation.component';
+import { TutorielComponent } from './tutoriel/tutoriel.component';
+import { ReservationByTypeComponent } from './reservation-by-type/reservation-by-type.component';
 
 
 @NgModule({
@@ -73,11 +77,19 @@ import { CreateTypeComponent } from './create-type/create-type.component';
     LoginComponent,
     ChoiceCreationComponent,
     CreateTypeComponent,
+    ResourceInfoComponent,
+    SuccessfullCreationComponent,
+    TutorielComponent,
+    ReservationByTypeComponent,
   ],
   entryComponents: [
     CreateResourceComponent,
     ChoiceCreationComponent,
     CreateTypeComponent,
+    ResourceInfoComponent,
+    SuccessfullCreationComponent,
+    TutorielComponent,
+    ReservationByTypeComponent,
     LoginComponent],
   imports: [
     BrowserModule,

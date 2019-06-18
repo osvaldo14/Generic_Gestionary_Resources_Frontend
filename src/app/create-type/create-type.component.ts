@@ -2,6 +2,10 @@ import {Component, OnInit} from '@angular/core';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ServerService} from '../server.service';
 import {ResourceType, caracteristics} from '../resource-type';
+import {ChoiceCreationComponent} from '../choice-creation/choice-creation.component';
+import {MatDialog} from '@angular/material';
+import {CreateResourceComponent} from '../create-resource/create-resource.component';
+import {SuccessfullCreationComponent} from '../successfull-creation/successfull-creation.component';
 
 @Component({
   selector: 'app-create-type',

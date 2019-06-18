@@ -15,3 +15,12 @@
   top: 0;
   z-index: 1;
 }
+
+.suppression {
+  text-align: center;
+}
+
+.tuto {
+  margin-bottom: 1rem;
+  margin-left: 1rem;
+}

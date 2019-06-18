@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {CreateResourceComponent} from '../create-resource/create-resource.component';
 import {CreateTypeComponent} from '../create-type/create-type.component';
 import {MatDialog} from '@angular/material';
@@ -11,7 +11,8 @@ import {MatDialog} from '@angular/material';
 })
 export class ChoiceCreationComponent implements OnInit {
 
-  constructor(public dialog: MatDialog) { }
+  constructor(public dialog: MatDialog) {
+  }
 
   ngOnInit() {
   }
@@ -30,6 +31,10 @@ export class ChoiceCreationComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);
     });
+  }
+
+  closeMyself(): void {
+    this.dialog.closeAll();
   }
 
 }

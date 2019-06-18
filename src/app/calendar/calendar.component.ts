@@ -29,7 +29,8 @@ import {FormControl} from '@angular/forms';
 import {Reservation} from '../interface/Reservation';
 import {forEach} from '@angular/router/src/utils/collection';
 import {MatSnackBar} from '@angular/material';
-
+import {isNull} from 'util';
+import * as $ from 'jquery';
 
 const colors: any = {
   red: {
@@ -51,6 +52,9 @@ export interface Food {
   viewValue: string;
 }
 
+declare var $: any;
+
+
 export interface MyEvent extends CalendarEvent {
   title: string;
   resources: string[];
@@ -70,12 +74,12 @@ export interface MyEvent extends CalendarEvent {
   templateUrl: './calendar.component.html',
   styleUrls: ['./calendar.component.css']
 })
+
 export class CalendarComponent implements OnInit {
   @ViewChild('modalContent') modalContent: TemplateRef<any>;
   foods: Food[] = [];
 
   resourceList: string[] = [];
-
 
   view: CalendarView = CalendarView.Month;
 
@@ -116,6 +120,7 @@ export class CalendarComponent implements OnInit {
   ngOnInit() {
     this.create_resources_reservation_list();
     this.get_reservation_from_db();
+    this.displayConflict();
   }
 
   dayClicked({date, events}: { date: Date; events: CalendarEvent[] }): void {
@@ -130,6 +135,8 @@ export class CalendarComponent implements OnInit {
         this.activeDayIsOpen = true;
       }
     }
+    this.addEvent();
+    $('#exampleModalCenter').modal('show');
   }
 
   eventTimesChanged({
@@ -248,4 +255,27 @@ export class CalendarComponent implements OnInit {
       duration: 2000,
     });
   }
+
+  displayConflict() {
+    this.Server.conflict().subscribe((data: string[]) => {
+      if (isNull(data)) {
+        console.log('pas de conflit !');
+      } else {
+        this.events.forEach((e: MyEvent) => {
+          for (let i = 0; i < data.length; i++) {
+            if (e.title === data[i]) {
+              e.color = colors.red;
+              delete data[i];
+              break;
+            }
+          }
+        });
+      }
+    });
+  }
+
 }
+
+
+
+

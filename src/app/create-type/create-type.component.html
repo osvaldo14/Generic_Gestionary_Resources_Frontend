@@ -23,5 +23,5 @@
     </div>
   </div>
 
-  <button type="button" class="btn btn-primary" (click)="createType(this.typeForm.value)">Créer</button>
+  <button type="button" class="btn btn-primary" [mat-dialog-close]="true" (click)="createType(this.typeForm.value)">Créer</button>
 </form>

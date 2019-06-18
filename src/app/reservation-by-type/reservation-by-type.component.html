@@ -1,0 +1,12 @@
+<div *ngIf="reservations == null"><h3>Il n'y a pas de réservation pour ce type de ressource</h3></div>
+
+<mat-card *ngFor="let r of reservations">
+  Nom : <strong>{{r.name}}</strong><br>
+    <mat-divider></mat-divider>
+  début : <strong>{{r.start}}</strong><br>
+    <mat-divider></mat-divider>
+  fin : <strong>{{r.end}}</strong> <br>
+    <mat-divider></mat-divider>
+  Ressources :<ul *ngFor="let resource of r.resourceList"><li><strong>{{resource}}</strong></li></ul>
+
+</mat-card>

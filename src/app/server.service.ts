@@ -19,6 +19,10 @@ export class ServerService {
     return this.http.get('http://localhost:6999/');
   }
 
+  get_resources() {
+    return this.http.get('http://localhost:6999/resources');
+  }
+
   create_resource(r) {
 
     return this.http.post('http://localhost:6999/CreateResource', r);
@@ -57,8 +61,15 @@ export class ServerService {
   }
 
   delete_reservation(reservation) {
-    console.log('dans la fonction avec param =' + reservation);
     return this.http.post('http://localhost:6999/deletereservation', reservation);
+  }
+
+  delete_resource(resource) {
+    return this.http.post('http://localhost:6999/deleteresource', resource);
+  }
+
+  conflict() {
+    return this.http.get('http://localhost:6999/conflict');
   }
 
   login(username: string, password: string) {

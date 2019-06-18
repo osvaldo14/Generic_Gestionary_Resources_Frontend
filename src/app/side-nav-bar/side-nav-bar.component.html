@@ -12,8 +12,8 @@
         <!-- This is the tree node template for leaf nodes -->
         <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
           <!-- use a disabled button to provide padding for tree leaf -->
-          <button mat-icon-button disabled></button>
-          {{node.name}}
+          <button mat-icon-button (click)="deleteResource(node)" class="suppression">X</button>
+          <button mat-icon-button (click)="displayInfosResource(node)">{{node.name}}</button>
         </mat-tree-node>
         <!-- This is the tree node template for expandable nodes -->
         <mat-tree-node *matTreeNodeDef="let node;when: hasChild" matTreeNodePadding>
@@ -23,7 +23,7 @@
               {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
             </mat-icon>
           </button>
-          {{node.name}}
+          <a (click)="displayReservationByType(node)">{{node.name}}</a>
         </mat-tree-node>
       </mat-tree>
 
@@ -33,6 +33,7 @@
       <button mat-button [disabled]="true" >Optimiser</button>
       <a mat-list-item (click)="displayLoginPage()" >Login</a>
       <a mat-list-item href="#" hidden>Logout</a>
+      <a class="fixed-bottom tuto" (click)="displayTutoriel()">Tutoriel</a>
     </mat-nav-list>
 
   </mat-sidenav>

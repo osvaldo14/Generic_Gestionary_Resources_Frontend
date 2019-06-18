@@ -4,6 +4,7 @@ import {ServerService} from '../server.service';
 import {Reservation} from '../interface/Reservation';
 import {ResourceType} from '../interface/ResourceType';
 import {CreateTypeComponent} from '../create-type/create-type.component';
+import {ChoiceCreationComponent} from '../choice-creation/choice-creation.component';
 
 @Component({
   selector: 'app-create-resource',
@@ -19,7 +20,7 @@ export class CreateResourceComponent implements OnInit {
   types: ResourceType[] = [];
   keysNames: string[] = [];
 
-  constructor(private _formBuilder: FormBuilder, private Server: ServerService/*, private creaType: CreateTypeComponent*/) {
+  constructor(private _formBuilder: FormBuilder, private Server: ServerService) {
   }
 
   ngOnInit() {

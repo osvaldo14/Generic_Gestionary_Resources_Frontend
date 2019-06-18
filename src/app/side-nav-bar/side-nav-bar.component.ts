@@ -14,6 +14,10 @@ import {CreateResourceComponent} from '../create-resource/create-resource.compon
 import {LoginComponent} from '../login/login.component';
 import {ChoiceCreationComponent} from '../choice-creation/choice-creation.component';
 import {CreateTypeComponent} from '../create-type/create-type.component';
+import {ResourceInfoComponent} from '../resource-info/resource-info.component';
+import {TutorielComponent} from '../tutoriel/tutoriel.component';
+import {ReservationByTypeComponent} from '../reservation-by-type/reservation-by-type.component';
+import {computeStyle} from '@angular/animations/browser/src/util';
 
 /**
  * Food data with nested structure.
@@ -37,12 +41,15 @@ interface ExampleFlatNode {
   styleUrls: ['./side-nav-bar.component.css']
 })
 export class SideNavBarComponent implements OnInit {
+  tuto = false;
   TREE_DATA: FoodNode[] = [];
   DISPLAY_RESOURCE = true;
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
     .pipe(
       map(result => result.matches)
     );
+
+  resources: Ressources[] = [];
 
   private transformer = (node: FoodNode, level: number) => {
     return {
@@ -69,6 +76,13 @@ export class SideNavBarComponent implements OnInit {
 
   ngOnInit() {
     this.create_tree_type();
+    //this.displayTutoriel();
+    this.Server.get_resources().subscribe((data: Ressources) => {
+      for (const r in data) {
+        this.resources.push(data[r]);
+      }
+    });
+    console.log(this.resources);
   }
 
   create_tree_type() {
@@ -111,5 +125,35 @@ export class SideNavBarComponent implements OnInit {
       console.log(`Dialog result: ${result}`);
     });
 
+  }
+
+
+  deleteResource(r: FoodNode) {
+    console.log(r.name);
+    this.Server.delete_resource(r.name).subscribe();
+  }
+
+  displayTutoriel() {
+    //if (!this.tuto) {
+    const dialog = this.dialog.open(TutorielComponent);
+    // this.tuto = true;
+    //}
+  }
+
+  displayReservationByType(typeClicked) {
+    const type: string = typeClicked.name;
+    console.log(type);
+    const dialog = this.dialog.open(ReservationByTypeComponent);
+    dialog.componentInstance.data = {
+      myType: type
+    };
+  }
+
+  displayInfosResource(resourceClicked) {
+    const resource: Ressources = this.resources.find(x => x.name === resourceClicked.name)
+    const dialog = this.dialog.open(ResourceInfoComponent);
+    dialog.componentInstance.data = {
+      infosResource: resource
+    };
   }
 }
