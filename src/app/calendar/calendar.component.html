@@ -93,7 +93,7 @@
 <br/><br/><br/>
 
 <h3>
-  Réservation
+  Liste des réservations :
   <button class="btn btn-primary pull-right" (click)="addEvent()">
     Add new
   </button>
@@ -164,11 +164,11 @@
         />
       </td>
       <td>
-        <button class="btn btn-primary" (click)="create_reservation(name.value, resources.value, start.value, end.value)">
-          Create
+        <button [disabled]="true" class="btn btn-primary" (click)="create_reservation(name.value, resources.value, start.value, end.value)">
+          Modifier
         </button>
         <button class="btn btn-danger" (click)="deleteEvent(event)">
-          Delete
+          Supprimer
         </button>
       </td>
     </tr>

@@ -1,0 +1,178 @@
+<h5 class="modal-title" id="exampleModalLongTitle">Réservation</h5>
+<mat-card>
+  <div class="table-responsive">
+    <table class="table table-bordered">
+      <thead>
+      <tr>
+        <th>Nom</th>
+        <th>Ressources</th>
+        <th>Début</th>
+        <th>Fin</th>
+        <th>Créer</th>
+      </tr>
+      </thead>
+
+      <tbody>
+        <td>
+          <input
+            #name
+            type="text"
+            class="form-control"
+          />
+        </td>
+        <td>
+          <mat-form-field>
+            <mat-label>Ressource(s)</mat-label>
+            <mat-select #resources multiple (click)="create_resources_reservation_list()">
+              <mat-option *ngFor="let r of resourceList" [value]="r">{{r}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </td>
+        <td>
+          <input
+            #start
+            class="form-control"
+            type="text"
+            mwlFlatpickr
+            [altInput]="true"
+            [convertModelValue]="true"
+            [enableTime]="true"
+            dateFormat="Y-m-dTH:i"
+            altFormat="F j, Y H:i"
+            placeholder="Not set"
+          />
+        </td>
+        <td>
+          <input
+            #end
+            class="form-control"
+            type="text"
+            mwlFlatpickr
+            [altInput]="true"
+            [convertModelValue]="true"
+            [enableTime]="true"
+            dateFormat="Y-m-dTH:i"
+            altFormat="F j, Y H:i"
+            placeholder="Not set"
+          />
+        </td>
+        <td>
+          <button [mat-dialog-close]="true" class="btn btn-primary" (click)="create_reservation(name.value, resources.value, start.value, end.value)">
+            Create
+          </button>
+        </td>
+      </tbody>
+    </table>
+  </div>
+</mat-card>
+
+
+<!-- PREFERENCES HORAIRES -->
+<div class="taclasse">
+
+
+<mat-card>
+  <mat-card-title>Préférences horaires</mat-card-title>
+
+  <mat-card>
+    <mat-card-subtitle>Préférence n°1</mat-card-subtitle>
+    <td>
+      <input
+        #start1
+        class="form-control"
+        type="text"
+        mwlFlatpickr
+        [altInput]="true"
+        [convertModelValue]="true"
+        [enableTime]="true"
+        dateFormat="Y-m-dTH:i"
+        altFormat="F j, Y H:i"
+        placeholder="Not set"
+      />
+    </td>
+    <td>
+      <input
+        #end1
+        class="form-control"
+        type="text"
+        mwlFlatpickr
+        [altInput]="true"
+        [convertModelValue]="true"
+        [enableTime]="true"
+        dateFormat="Y-m-dTH:i"
+        altFormat="F j, Y H:i"
+        placeholder="Not set"
+      />
+    </td>
+    <td>
+  </mat-card>
+
+
+  <mat-card>
+    <mat-card-subtitle>Préférence n°2</mat-card-subtitle>
+    <td>
+      <input
+        #start2
+        class="form-control"
+        type="text"
+        mwlFlatpickr
+        [altInput]="true"
+        [convertModelValue]="true"
+        [enableTime]="true"
+        dateFormat="Y-m-dTH:i"
+        altFormat="F j, Y H:i"
+        placeholder="Not set"
+      />
+    </td>
+    <td>
+      <input
+        #end2
+        class="form-control"
+        type="text"
+        mwlFlatpickr
+        [altInput]="true"
+        [convertModelValue]="true"
+        [enableTime]="true"
+        dateFormat="Y-m-dTH:i"
+        altFormat="F j, Y H:i"
+        placeholder="Not set"
+      />
+    </td>
+    <td>
+  </mat-card>
+
+
+  <mat-card>
+    <mat-card-subtitle>Préférence n°3</mat-card-subtitle>
+    <td>
+      <input
+        #start3
+        class="form-control"
+        type="text"
+        mwlFlatpickr
+        [altInput]="true"
+        [convertModelValue]="true"
+        [enableTime]="true"
+        dateFormat="Y-m-dTH:i"
+        altFormat="F j, Y H:i"
+        placeholder="Not set"
+      />
+    </td>
+    <td>
+      <input ng-disabled="all"
+        #end3
+        class="form-control"
+        type="text"
+        mwlFlatpickr
+        [altInput]="true"
+        [convertModelValue]="true"
+        [enableTime]="true"
+        dateFormat="Y-m-dTH:i"
+        altFormat="F j, Y H:i"
+        placeholder="Not set"
+      />
+    </td>
+    <td>
+  </mat-card>
+</mat-card>
+</div>

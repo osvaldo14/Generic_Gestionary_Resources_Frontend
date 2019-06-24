@@ -5,6 +5,7 @@ import {Reservation} from '../interface/Reservation';
 import {ResourceType} from '../interface/ResourceType';
 import {CreateTypeComponent} from '../create-type/create-type.component';
 import {ChoiceCreationComponent} from '../choice-creation/choice-creation.component';
+import {EventEmitterService} from '../event-emitter.service';
 
 @Component({
   selector: 'app-create-resource',
@@ -20,7 +21,7 @@ export class CreateResourceComponent implements OnInit {
   types: ResourceType[] = [];
   keysNames: string[] = [];
 
-  constructor(private _formBuilder: FormBuilder, private Server: ServerService) {
+  constructor(private _formBuilder: FormBuilder, private Server: ServerService, private eventEmitterService: EventEmitterService) {
   }
 
   ngOnInit() {
@@ -48,6 +49,7 @@ export class CreateResourceComponent implements OnInit {
   create_resource(resource) {
     const r = JSON.stringify(resource);
     this.Server.create_resource(r).subscribe();
+    this.eventEmitterService.onCreateResourceButtonClick();
   }
 
 

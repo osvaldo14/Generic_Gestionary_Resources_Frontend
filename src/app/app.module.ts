@@ -64,6 +64,9 @@ import { ResourceInfoComponent } from './resource-info/resource-info.component';
 import { SuccessfullCreationComponent } from './successfull-creation/successfull-creation.component';
 import { TutorielComponent } from './tutoriel/tutoriel.component';
 import { ReservationByTypeComponent } from './reservation-by-type/reservation-by-type.component';
+import { DeleteConfirmationComponent } from './delete-confirmation/delete-confirmation.component';
+import { ReservationFormComponent } from './reservation-form/reservation-form.component';
+import {EventEmitterService} from './event-emitter.service';
 
 
 @NgModule({
@@ -81,6 +84,8 @@ import { ReservationByTypeComponent } from './reservation-by-type/reservation-by
     SuccessfullCreationComponent,
     TutorielComponent,
     ReservationByTypeComponent,
+    DeleteConfirmationComponent,
+    ReservationFormComponent,
   ],
   entryComponents: [
     CreateResourceComponent,
@@ -90,6 +95,8 @@ import { ReservationByTypeComponent } from './reservation-by-type/reservation-by
     SuccessfullCreationComponent,
     TutorielComponent,
     ReservationByTypeComponent,
+    DeleteConfirmationComponent,
+    ReservationFormComponent,
     LoginComponent],
   imports: [
     BrowserModule,
@@ -154,6 +161,7 @@ import { ReservationByTypeComponent } from './reservation-by-type/reservation-by
     routing
   ],
   providers: [
+    EventEmitterService,
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
   ],

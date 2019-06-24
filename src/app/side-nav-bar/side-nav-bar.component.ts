@@ -18,6 +18,10 @@ import {ResourceInfoComponent} from '../resource-info/resource-info.component';
 import {TutorielComponent} from '../tutoriel/tutoriel.component';
 import {ReservationByTypeComponent} from '../reservation-by-type/reservation-by-type.component';
 import {computeStyle} from '@angular/animations/browser/src/util';
+import {MatBottomSheet} from '@angular/material/typings/bottom-sheet';
+import {DeleteConfirmationComponent} from '../delete-confirmation/delete-confirmation.component';
+import {ReservationFormComponent} from '../reservation-form/reservation-form.component';
+import {EventEmitterService} from '../event-emitter.service';
 
 /**
  * Food data with nested structure.
@@ -68,21 +72,18 @@ export class SideNavBarComponent implements OnInit {
   dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
 
 
-  constructor(private breakpointObserver: BreakpointObserver, private Server: ServerService, public dialog: MatDialog) {
+  constructor(private breakpointObserver: BreakpointObserver, private Server: ServerService, public dialog: MatDialog,
+              private eventEmitterService: EventEmitterService) {
     this.dataSource.data = this.TREE_DATA;
   }
 
   hasChild = (_: number, node: ExampleFlatNode) => node.expandable;
 
   ngOnInit() {
-    this.create_tree_type();
-    //this.displayTutoriel();
-    this.Server.get_resources().subscribe((data: Ressources) => {
-      for (const r in data) {
-        this.resources.push(data[r]);
-      }
+    this.updateResource();
+    this.eventEmitterService.invokeCreateResourceFunction.subscribe((name: string) => {
+      this.updateResource();
     });
-    console.log(this.resources);
   }
 
   create_tree_type() {
@@ -129,15 +130,18 @@ export class SideNavBarComponent implements OnInit {
 
 
   deleteResource(r: FoodNode) {
-    console.log(r.name);
-    this.Server.delete_resource(r.name).subscribe();
+    const dialog = this.dialog.open(DeleteConfirmationComponent);
+    dialog.afterClosed().subscribe(result => {
+      if (`${result}` === 'confirm') {
+        this.Server.delete_resource(r.name).subscribe();
+        console.log(r.name);
+        this.create_tree_type();
+      }
+    });
   }
 
   displayTutoriel() {
-    //if (!this.tuto) {
     const dialog = this.dialog.open(TutorielComponent);
-    // this.tuto = true;
-    //}
   }
 
   displayReservationByType(typeClicked) {
@@ -150,10 +154,23 @@ export class SideNavBarComponent implements OnInit {
   }
 
   displayInfosResource(resourceClicked) {
-    const resource: Ressources = this.resources.find(x => x.name === resourceClicked.name)
+    const resource: Ressources = this.resources.find(x => x.name === resourceClicked.name);
     const dialog = this.dialog.open(ResourceInfoComponent);
     dialog.componentInstance.data = {
       infosResource: resource
     };
+  }
+
+  displayReservationForm() {
+    const dialog = this.dialog.open(ReservationFormComponent);
+  }
+
+  updateResource() {
+    this.create_tree_type();
+    this.Server.get_resources().subscribe((data: Ressources) => {
+      for (const r in data) {
+        this.resources.push(data[r]);
+      }
+    });
   }
 }

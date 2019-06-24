@@ -31,6 +31,7 @@ import {forEach} from '@angular/router/src/utils/collection';
 import {MatSnackBar} from '@angular/material';
 import {isNull} from 'util';
 import * as $ from 'jquery';
+import {EventEmitterService} from '../event-emitter.service';
 
 const colors: any = {
   red: {
@@ -56,6 +57,7 @@ declare var $: any;
 
 
 export interface MyEvent extends CalendarEvent {
+  id: number;
   title: string;
   resources: string[];
   start: Date;
@@ -110,10 +112,15 @@ export class CalendarComponent implements OnInit {
   refresh: Subject<any> = new Subject();
 
   events: MyEvent[] = [];
+  event: MyEvent;
+
+  //events: MyEvent[] = this.Server.events;
+  message: string;
 
   activeDayIsOpen: boolean = true;
 
-  constructor(private modal: NgbModal, private Server: ServerService, private snackBar: MatSnackBar) {
+  constructor(private modal: NgbModal, private Server: ServerService, private snackBar: MatSnackBar,
+              private eventEmitterService: EventEmitterService) {
 
   }
 
@@ -121,6 +128,12 @@ export class CalendarComponent implements OnInit {
     this.create_resources_reservation_list();
     this.get_reservation_from_db();
     this.displayConflict();
+    this.eventEmitterService.
+      invokeCalendarReservationFunction.subscribe((name: string) => {
+        console.log('test');
+        this.get_reservation_from_db();
+        this.displayConflict();
+      });
   }
 
   dayClicked({date, events}: { date: Date; events: CalendarEvent[] }): void {
@@ -135,8 +148,10 @@ export class CalendarComponent implements OnInit {
         this.activeDayIsOpen = true;
       }
     }
-    this.addEvent();
-    $('#exampleModalCenter').modal('show');
+
+    // FENETRE MODAL SI CLICK SUR UN JOUR DETECTE.
+    //this.addEvent();
+    //$('#exampleModalCenter').modal('show');
   }
 
   eventTimesChanged({
@@ -167,7 +182,8 @@ export class CalendarComponent implements OnInit {
     this.events = [
       ...this.events,
       {
-        title: 'New event',
+        id: null,
+        title: 'Nouvelle réservation',
         resources: null,
         start: startOfDay(new Date()),
         end: endOfDay(new Date()),
@@ -184,7 +200,7 @@ export class CalendarComponent implements OnInit {
 
   deleteEvent(eventToDelete: CalendarEvent) {
     this.events = this.events.filter(event => event !== eventToDelete);
-    this.Server.delete_reservation(eventToDelete.title).subscribe();
+    this.Server.delete_reservation(eventToDelete.id).subscribe();
   }
 
   setView(view: CalendarView) {
@@ -195,14 +211,15 @@ export class CalendarComponent implements OnInit {
     this.activeDayIsOpen = false;
   }
 
-  addEventFromServer(name, start, end, r: Array<string>): void {
+  addEventFromServer(name, start, end, r: Array<string>, id): void {
     this.events = [
       ...this.events,
       {
+        id: id,
         title: name,
         resources: r,
-        start: startOfDay(new Date(start)),
-        end: endOfDay(new Date(end)),
+        start: new Date(start),
+        end: new Date(end),
         color: colors.blue,
         draggable: true,
         resizable: {
@@ -221,8 +238,8 @@ export class CalendarComponent implements OnInit {
       const array = {
         name: r_name,
         resourceList: r_resources,
-        start: r_start,
-        end: r_end
+        start: new Date(r_start).getTime().toString(),
+        end: new Date(r_end).getTime().toString()
       };
       const r = JSON.stringify(array);
       this.Server.create_reservation(r).subscribe();
@@ -242,10 +259,10 @@ export class CalendarComponent implements OnInit {
   }
 
   get_reservation_from_db() {
+    this.events = [];
     this.Server.get_reservation_list().subscribe((data: Reservation[]) => {
       for (let i = 0; i < data.length; i++) {
-        this.addEventFromServer(data[i].name, data[i].start, data[i].end, data[i].resourceList);
-        console.log();
+        this.addEventFromServer(data[i].name, data[i].start, data[i].end, data[i].resourceList, data[i].id);
       }
     });
   }
@@ -271,6 +288,27 @@ export class CalendarComponent implements OnInit {
           }
         });
       }
+    });
+  }
+
+  test() {
+    this.Server.event.subscribe(event => {
+      this.events = event;
+      this.events = [];
+      this.get_reservation_from_db(); /*{
+        id: 0,
+        title: '',
+        resources: [],
+        start: new Date(0),
+        end: new Date(0),
+        color: colors.blue,
+        draggable: true,
+        resizable: {
+          beforeStart: true,
+          afterEnd: true
+        },
+        ressourcesFormControl: new FormControl()
+      };*/
     });
   }
 

@@ -2,17 +2,51 @@ import {Injectable} from '@angular/core';
 import * as $ from 'jquery';
 import {HttpClient} from '@angular/common/http';
 import {Reservation} from './interface/Reservation';
-import {config} from 'rxjs';
+import {BehaviorSubject, config} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {User} from './interface/User';
 import {RouterModule, Routes} from '@angular/router';
 import {LoginComponent} from './login/login.component';
 import {AuthGuard} from './auth-guard';
+import {FormControl} from '@angular/forms';
+import {
+  CalendarEvent,
+  CalendarEventAction,
+  CalendarEventTimesChangedEvent,
+  CalendarView
+} from 'angular-calendar';
+
+export interface MyEvent extends CalendarEvent {
+  id: number;
+  title: string;
+  resources: string[];
+  start: Date;
+  end: Date;
+  color: any;
+  draggable: true;
+  resizable: {
+    beforeStart: true,
+    afterEnd: true
+  };
+  ressourcesFormControl: FormControl;
+}
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class ServerService {
+  private messageSource = new BehaviorSubject<string>('default value');
+  currentMessage = this.messageSource.asObservable();
+  changeMessage(message: string) {
+    this.messageSource.next(message);
+  }
+
+  private events = new BehaviorSubject<MyEvent[]>([]);
+  event = this.events.asObservable();
+  addEvent(e: MyEvent) {
+    this.events.value.push(e);
+  }
 
   get_resources_names() {
 
@@ -61,6 +95,7 @@ export class ServerService {
   }
 
   delete_reservation(reservation) {
+    console.log(reservation);
     return this.http.post('http://localhost:6999/deletereservation', reservation);
   }
 
