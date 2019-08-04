@@ -135,8 +135,10 @@ export class CalendarComponent implements OnInit {
         // A changer pour un async await ! ----
         let cpt = 0;
         let r = false;
+        let c = false;
         r = this.get_reservation_from_db();
-        while ( !r ) { cpt += 1; }
+        c = this.displayConflict();
+        while ( !r && !c ) { cpt += 1; }
         // ------------------------------------
         this.openSnackBar('La réservation a bien été créee', 'OK !');
       });
@@ -154,10 +156,6 @@ export class CalendarComponent implements OnInit {
         this.activeDayIsOpen = true;
       }
     }
-
-    // FENETRE MODAL SI CLICK SUR UN JOUR DETECTE.
-    //this.addEvent();
-    //$('#exampleModalCenter').modal('show');
   }
 
   eventTimesChanged({
@@ -181,6 +179,10 @@ export class CalendarComponent implements OnInit {
       resources: []
     };
     this.Server.modify_reservation(JSON.stringify(reservationUpdates)).subscribe();
+    let c = false;
+    let cpt = 0;
+    c = this.displayConflict();
+    while ( !c ) { cpt += 1; }
     this.handleEvent('Dropped or resized', event as MyEvent);
   }
 
@@ -289,6 +291,7 @@ export class CalendarComponent implements OnInit {
         });
       }
     });
+    return true;
   }
 
   update_reservation(event, name, start, end, resources) {
@@ -300,6 +303,10 @@ export class CalendarComponent implements OnInit {
       resources: resources
     };
     this.Server.modify_reservation(JSON.stringify(reservationUpdates)).subscribe();
+    let c = false;
+    let cpt = 0;
+    c = this.displayConflict();
+    while ( !c ) { cpt += 1; }
     this.openSnackBar('La réservation a bien été modifiée', 'OK !');
   }
 
