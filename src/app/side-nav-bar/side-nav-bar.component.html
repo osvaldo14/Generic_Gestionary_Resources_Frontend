@@ -34,7 +34,7 @@
       <button mat-button [disabled]="true" >Optimiser</button>
       <a mat-list-item (click)="displayLoginPage()" >Login</a>
       <a mat-list-item href="#" hidden>Logout</a>
-      <a class="fixed-bottom tuto" (click)="displayTutoriel()">Tutoriel</a>
+      <a mat-list-item (click)="displayTutoriel()">Tutoriel</a>
     </mat-nav-list>
 
   </mat-sidenav>
@@ -50,6 +50,7 @@
       </button>
       <span>HEPIA Resource Manager</span>
     </mat-toolbar>
-    <app-calendar></app-calendar>
+    <div class="fixe"><app-calendar></app-calendar></div>
+
   </mat-sidenav-content>
 </mat-sidenav-container>

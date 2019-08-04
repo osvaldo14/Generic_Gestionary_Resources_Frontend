@@ -77,11 +77,12 @@ export class ReservationFormComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.create_resources_reservation_list();
   }
 
   openSnackBar(message: string, action: string) {
     this.snackBar.open(message, action, {
-      duration: 2000,
+      duration: 5000,
     });
   }
 
@@ -93,10 +94,6 @@ export class ReservationFormComponent implements OnInit {
         start: new Date(r_start).getTime().toString(),
         end: new Date(r_end).getTime().toString()
       };
-      console.log(r_name);
-      console.log(r_resources)
-      console.log(r_start);
-      console.log(r_end);
       const r = JSON.stringify(array);
       this.Server.create_reservation(r).subscribe();
     } else {
@@ -109,20 +106,6 @@ export class ReservationFormComponent implements OnInit {
     this.event.end = new Date(r_end);
     this.Server.addEvent(this.event);
     this.eventEmitterService.onCreateReservationButtonClick();
-    /*this.Server.events.push({
-      id: 0,
-      title: r_name,
-      resources: r_resources,
-      start: new Date(r_start),
-      end: new Date(r_end),
-      color: colors.blue,
-      draggable: true,
-      resizable: {
-        beforeStart: true,
-        afterEnd: true
-      },
-      ressourcesFormControl: new FormControl()
-    });*/
   }
 
   create_resources_reservation_list() {
@@ -133,11 +116,6 @@ export class ReservationFormComponent implements OnInit {
         this.resourceList.push(String(data[i]));
       }
     });
-    this.Server.changeMessage('Hello from the reservation form');
-  }
-
-  newMessage() {
-    this.Server.changeMessage('Hello from the reservation form');
   }
 
 }

@@ -1,4 +1,4 @@
-<div *ngIf="reservations == []"><h3>Il n'y a pas de réservation pour ce type de ressource</h3></div>
+<div *ngIf="reservations.length == 0"><h3>Il n'y a pas de réservation pour ce type de ressource</h3></div>
 
 <mat-card *ngFor="let r of reservations">
   Nom : <strong>{{r.name}}</strong><br>

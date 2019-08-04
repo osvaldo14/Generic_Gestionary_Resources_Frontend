@@ -32,12 +32,9 @@ export class CreateResourceComponent implements OnInit {
       secondCtrl: ['', Validators.required]
     });
 
-    /*---------------------NEW------------------------ */
     this.thirdFormGroup = this._formBuilder.group({
       typeCaracteristics: this._formBuilder.array([this._formBuilder.group({caracValue: ''})])
     });
-    /*---------------------NEW------------------------ */
-
 
     this.Server.get_resource_types().subscribe((data: ResourceType[]) => {
       for (let i = 0; i < data.length; i++) {

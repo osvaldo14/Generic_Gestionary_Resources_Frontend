@@ -94,7 +94,7 @@
 
 <h3>
   Liste des réservations :
-  <button class="btn btn-primary pull-right" (click)="addEvent()">
+  <button [hidden]="true" class="btn btn-primary pull-right" (click)="addEvent()">
     Add new
   </button>
   <div class="clearfix"></div>
@@ -104,11 +104,11 @@
   <table class="table table-bordered">
     <thead>
     <tr>
-      <th>Title</th>
+      <th>Nom</th>
       <th>Ressources</th>
-      <th>Starts at</th>
-      <th>Ends at</th>
-      <th>Remove</th>
+      <th>Début</th>
+      <th>Fin</th>
+      <th>Modifier / Supprimer</th>
     </tr>
     </thead>
 
@@ -116,6 +116,7 @@
     <tr *ngFor="let event of events">
       <td>
         <input
+
           #name
           type="text"
           class="form-control"
@@ -126,13 +127,14 @@
       <td>
         <mat-form-field>
           <mat-label>Ressources</mat-label>
-          <mat-select #resources [formControl]="event.ressourcesFormControl" multiple (click)="create_resources_reservation_list()">
+          <mat-select  #resources [formControl]="event.ressourcesFormControl" multiple (click)="create_resources_reservation_list()">
             <mat-option *ngFor="let r of resourceList" [value]="r">{{r}}</mat-option>
           </mat-select>
         </mat-form-field>
       </td>
       <td>
         <input
+
           #start
           class="form-control"
           type="text"
@@ -149,6 +151,7 @@
       </td>
       <td>
         <input
+
           #end
           class="form-control"
           type="text"
@@ -164,7 +167,7 @@
         />
       </td>
       <td>
-        <button [disabled]="true" class="btn btn-primary" (click)="create_reservation(name.value, resources.value, start.value, end.value)">
+        <button class="btn btn-primary" (click)="update_reservation(event, name.value, start.value, end.value, resources.value)">
           Modifier
         </button>
         <button class="btn btn-danger" (click)="deleteEvent(event)">
@@ -174,106 +177,4 @@
     </tr>
     </tbody>
   </table>
-</div>
-
-<!-- Modal -->
-<div class="modal fade" data-backdrop="false" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Réservation</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-
-
-        <div class="table-responsive">
-          <table class="table table-bordered">
-            <thead>
-            <tr>
-              <th>Title</th>
-              <th>Ressources</th>
-              <th>Starts at</th>
-              <th>Ends at</th>
-              <th>Remove</th>
-            </tr>
-            </thead>
-
-            <tbody>
-            <tr *ngFor="let event of events">
-              <td>
-                <input
-                  #name
-                  type="text"
-                  class="form-control"
-                  [(ngModel)]="event.title"
-                  (keyup)="refresh.next()"
-                />
-              </td>
-              <td>
-                <mat-form-field>
-                  <mat-label>Ressources</mat-label>
-                  <mat-select #resources [formControl]="event.ressourcesFormControl" multiple (click)="create_resources_reservation_list()">
-                    <mat-option *ngFor="let r of resourceList" [value]="r">{{r}}</mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </td>
-              <td>
-                <input
-                  #start
-                  class="form-control"
-                  type="text"
-                  mwlFlatpickr
-                  [(ngModel)]="event.start"
-                  (ngModelChange)="refresh.next()"
-                  [altInput]="true"
-                  [convertModelValue]="true"
-                  [enableTime]="true"
-                  dateFormat="Y-m-dTH:i"
-                  altFormat="F j, Y H:i"
-                  placeholder="Not set"
-                />
-              </td>
-              <td>
-                <input
-                  #end
-                  class="form-control"
-                  type="text"
-                  mwlFlatpickr
-                  [(ngModel)]="event.end"
-                  (ngModelChange)="refresh.next()"
-                  [altInput]="true"
-                  [convertModelValue]="true"
-                  [enableTime]="true"
-                  dateFormat="Y-m-dTH:i"
-                  altFormat="F j, Y H:i"
-                  placeholder="Not set"
-                />
-              </td>
-              <td>
-                <button class="btn btn-primary" (click)="create_reservation(name.value, resources.value, start.value, end.value)">
-                  Create
-                </button>
-                <button class="btn btn-danger" (click)="deleteEvent(event)">
-                  Delete
-                </button>
-              </td>
-            </tr>
-            </tbody>
-          </table>
-        </div>
-
-
-
-
-
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
-    </div>
-  </div>
 </div>

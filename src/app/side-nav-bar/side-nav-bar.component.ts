@@ -82,7 +82,11 @@ export class SideNavBarComponent implements OnInit {
   ngOnInit() {
     this.updateResource();
     this.eventEmitterService.invokeCreateResourceFunction.subscribe((name: string) => {
-      this.updateResource();
+      this.ToogleDisplayResource();
+      let cpt = 0;
+      let r = false;
+      r = this.updateResource();
+      while ( !r ) { cpt += 1; }
     });
   }
 
@@ -141,7 +145,7 @@ export class SideNavBarComponent implements OnInit {
   }
 
   displayTutoriel() {
-    const dialog = this.dialog.open(TutorielComponent);
+    this.dialog.open(TutorielComponent);
   }
 
   displayReservationByType(typeClicked) {
@@ -172,5 +176,6 @@ export class SideNavBarComponent implements OnInit {
         this.resources.push(data[r]);
       }
     });
+    return true;
   }
 }

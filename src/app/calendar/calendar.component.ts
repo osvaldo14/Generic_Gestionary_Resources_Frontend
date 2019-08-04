@@ -28,10 +28,11 @@ import {Ressources} from '../interface/ressources';
 import {FormControl} from '@angular/forms';
 import {Reservation} from '../interface/Reservation';
 import {forEach} from '@angular/router/src/utils/collection';
-import {MatSnackBar} from '@angular/material';
+import {MatDialog, MatSnackBar} from '@angular/material';
 import {isNull} from 'util';
 import * as $ from 'jquery';
 import {EventEmitterService} from '../event-emitter.service';
+import {ReservationFormComponent} from '../reservation-form/reservation-form.component';
 
 const colors: any = {
   red: {
@@ -120,7 +121,7 @@ export class CalendarComponent implements OnInit {
   activeDayIsOpen: boolean = true;
 
   constructor(private modal: NgbModal, private Server: ServerService, private snackBar: MatSnackBar,
-              private eventEmitterService: EventEmitterService) {
+              private eventEmitterService: EventEmitterService, public dialog: MatDialog) {
 
   }
 
@@ -131,8 +132,13 @@ export class CalendarComponent implements OnInit {
     this.eventEmitterService.
       invokeCalendarReservationFunction.subscribe((name: string) => {
         console.log('test');
-        this.get_reservation_from_db();
-        this.displayConflict();
+        // A changer pour un async await ! ----
+        let cpt = 0;
+        let r = false;
+        r = this.get_reservation_from_db();
+        while ( !r ) { cpt += 1; }
+        // ------------------------------------
+        this.openSnackBar('La réservation a bien été créee', 'OK !');
       });
   }
 
@@ -167,6 +173,14 @@ export class CalendarComponent implements OnInit {
       }
       return iEvent;
     });
+    const reservationUpdates = {
+      reservationID: event.id,
+      start :  new Date(newStart).getTime().toString(),
+      end:  new Date(newEnd).getTime().toString(),
+      name: 'not modified',
+      resources: []
+    };
+    this.Server.modify_reservation(JSON.stringify(reservationUpdates)).subscribe();
     this.handleEvent('Dropped or resized', event as MyEvent);
   }
 
@@ -233,21 +247,6 @@ export class CalendarComponent implements OnInit {
     this.updateRessourcesSelected();
   }
 
-  create_reservation(r_name, r_resources, r_start, r_end) {
-    if (r_resources != null) {
-      const array = {
-        name: r_name,
-        resourceList: r_resources,
-        start: new Date(r_start).getTime().toString(),
-        end: new Date(r_end).getTime().toString()
-      };
-      const r = JSON.stringify(array);
-      this.Server.create_reservation(r).subscribe();
-    } else {
-      this.openSnackBar('Vous ne pouvez pas créer de réservation sans ressources', 'Compris !');
-    }
-  }
-
   create_resources_reservation_list() {
     this.foods = [];
     this.resourceList = [];
@@ -265,11 +264,12 @@ export class CalendarComponent implements OnInit {
         this.addEventFromServer(data[i].name, data[i].start, data[i].end, data[i].resourceList, data[i].id);
       }
     });
+    return true;
   }
 
   openSnackBar(message: string, action: string) {
     this.snackBar.open(message, action, {
-      duration: 2000,
+      duration: 5000,
     });
   }
 
@@ -280,7 +280,7 @@ export class CalendarComponent implements OnInit {
       } else {
         this.events.forEach((e: MyEvent) => {
           for (let i = 0; i < data.length; i++) {
-            if (e.title === data[i]) {
+            if (e.id.toString() === data[i]) {
               e.color = colors.red;
               delete data[i];
               break;
@@ -291,25 +291,16 @@ export class CalendarComponent implements OnInit {
     });
   }
 
-  test() {
-    this.Server.event.subscribe(event => {
-      this.events = event;
-      this.events = [];
-      this.get_reservation_from_db(); /*{
-        id: 0,
-        title: '',
-        resources: [],
-        start: new Date(0),
-        end: new Date(0),
-        color: colors.blue,
-        draggable: true,
-        resizable: {
-          beforeStart: true,
-          afterEnd: true
-        },
-        ressourcesFormControl: new FormControl()
-      };*/
-    });
+  update_reservation(event, name, start, end, resources) {
+    const reservationUpdates = {
+      reservationID: event.id,
+      start :  new Date(start).getTime().toString(),
+      end:  new Date(end).getTime().toString(),
+      name: name,
+      resources: resources
+    };
+    this.Server.modify_reservation(JSON.stringify(reservationUpdates)).subscribe();
+    this.openSnackBar('La réservation a bien été modifiée', 'OK !');
   }
 
 }

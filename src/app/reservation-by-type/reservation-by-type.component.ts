@@ -39,6 +39,7 @@ export class ReservationByTypeComponent implements OnInit {
       }
       return false;
       });
+      console.log(this.reservations);
       this.updateTime();
     });
   }

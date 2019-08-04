@@ -107,6 +107,10 @@ export class ServerService {
     return this.http.get('http://localhost:6999/conflict');
   }
 
+  modify_reservation(updates) {
+    return this.http.post('http://localhost:6999/modifyreservation', updates);
+  }
+
   login(username: string, password: string) {
     return this.http.post<any>(`http:localhost:6999/users/authenticate`, {username, password})
       .pipe(map(user => {

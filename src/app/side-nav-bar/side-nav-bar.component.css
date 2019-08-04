@@ -28,3 +28,9 @@
 .space{
   margin-right: 10px;
 }
+
+.fixe{
+  margin-top: 1rem;
+  z-index: -1;
+  position:relative;
+}
