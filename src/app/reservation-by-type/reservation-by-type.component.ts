@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Reservation} from '../interface/Reservation';
 import {ServerService} from '../server.service';
-import {forEach} from '@angular/router/src/utils/collection';
 import {Ressources} from '../interface/ressources';
 import * as moment from 'moment';
 

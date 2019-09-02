@@ -27,7 +27,7 @@ import {ServerService} from '../server.service';
 import {Ressources} from '../interface/ressources';
 import {FormControl} from '@angular/forms';
 import {Reservation} from '../interface/Reservation';
-import {forEach} from '@angular/router/src/utils/collection';
+//import {forEach} from '@angular/router/src/utils/collection';
 import {MatDialog, MatSnackBar} from '@angular/material';
 import {isNull} from 'util';
 import * as $ from 'jquery';

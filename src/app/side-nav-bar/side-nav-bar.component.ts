@@ -17,7 +17,6 @@ import {CreateTypeComponent} from '../create-type/create-type.component';
 import {ResourceInfoComponent} from '../resource-info/resource-info.component';
 import {TutorielComponent} from '../tutoriel/tutoriel.component';
 import {ReservationByTypeComponent} from '../reservation-by-type/reservation-by-type.component';
-import {computeStyle} from '@angular/animations/browser/src/util';
 import {MatBottomSheet} from '@angular/material/typings/bottom-sheet';
 import {DeleteConfirmationComponent} from '../delete-confirmation/delete-confirmation.component';
 import {ReservationFormComponent} from '../reservation-form/reservation-form.component';
