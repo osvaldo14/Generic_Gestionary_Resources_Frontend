@@ -1,3 +1,5 @@
+<mat-dialog-content class="mat-typography">
+
 <div *ngIf="reservations.length == 0"><h3>Il n'y a pas de réservation pour ce type de ressource</h3></div>
 
 <mat-card *ngFor="let r of reservations">
@@ -10,3 +12,4 @@
   Ressources :<ul *ngFor="let resource of r.resourceList"><li><strong>{{resource}}</strong></li></ul>
 
 </mat-card>
+</mat-dialog-content>

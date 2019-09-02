@@ -179,11 +179,11 @@ export class CalendarComponent implements OnInit {
       resources: []
     };
     this.Server.modify_reservation(JSON.stringify(reservationUpdates)).subscribe();
+    this.handleEvent('Dropped or resized', event as MyEvent);
     let c = false;
     let cpt = 0;
     c = this.displayConflict();
     while ( !c ) { cpt += 1; }
-    this.handleEvent('Dropped or resized', event as MyEvent);
   }
 
   handleEvent(action: string, event: MyEvent): void {
