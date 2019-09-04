@@ -140,7 +140,7 @@ export class CalendarComponent implements OnInit {
         c = this.displayConflict();
         while ( !r && !c ) { cpt += 1; }
         // ------------------------------------
-        this.openSnackBar('La réservation a bien été créee', 'OK !');
+        this.openSnackBar('La réservation a bien été créée', 'OK !');
       });
   }
 

@@ -5,20 +5,20 @@
   <label>
     Nom du type: <input formControlName="name" />
   </label>
-  <h2>Caractéristique</h2>
+  <h2>Attribut(s)</h2>
   <div formArrayName="typeCaracteristics">
     <div *ngFor="let item of carac.controls; let caracIndex = index" [formGroupName]="caracIndex">
     <label>
       Nom : <input formControlName="caracName">
-      Valeur :
+      Type :
       <!--mat-select>
         <mat-option *ngFor="let c of choices" [value]="choices">{{c}}</mat-option>
       </mat-select-->
       <input formControlName="caracValue">
     </label>
 
-      <button type="button" class="btn btn-success"  (click)="addCarac()">Ajouter une caractéristique</button>
-      <button type="button" class="btn btn-danger" (click)="deleteCarac(caracIndex)">Supprimer cette caractéristique</button>
+      <button type="button" class="btn btn-success"  (click)="addCarac()">Ajouter un attribut</button>
+      <button type="button" class="btn btn-danger" (click)="deleteCarac(caracIndex)">Supprimer cet attribut</button>
 
     </div>
   </div>
